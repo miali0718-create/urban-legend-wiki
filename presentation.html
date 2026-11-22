@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>恐懼的集體創作：日本都市傳說與背後的心理學密碼 | LLM Wiki 教學簡報</title>
+<style>
+  :root {
+    --bg-forest: #132219;
+    --bg-card: #1C3124;
+    --bg-card-alt: #243C2D;
+    --accent-amber: #E5A93B;
+    --accent-brown: #8C5A32;
+    --accent-mint: #7ED4A6;
+    --accent-coral: #F27D6B;
+    --text-main: #F7F5EE;
+    --text-muted: #C5D1C8;
+    --border-subtle: rgba(229, 169, 59, 0.32);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+    background-color: var(--bg-forest);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.65;
+  }
+
+  /* 頂部進度與架構導覽列 */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px;
+    background: rgba(12, 22, 16, 0.92);
+    border-bottom: 2px solid var(--border-subtle);
+    font-size: 0.95rem;
+  }
+
+  .brand {
+    font-weight: 700;
+    color: var(--accent-amber);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .badge {
+    background: var(--accent-brown);
+    color: #FFF;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .progress-bar {
+    width: 180px;
+    height: 8px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-amber);
+    width: 12.5%;
+    transition: width 0.3s ease;
+  }
+
+  /* 簡報主舞台 */
+  main {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 48px;
+    overflow-y: auto;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1180px;
+    animation: fadeIn 0.35s ease;
+  }
+
+  .slide.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    font-size: 2.6rem;
+    color: var(--accent-amber);
+    margin-bottom: 14px;
+    line-height: 1.25;
+  }
+
+  h2 {
+    font-size: 1.95rem;
+    color: var(--accent-amber);
+    margin-bottom: 18px;
+    border-left: 6px solid var(--accent-amber);
+    padding-left: 16px;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    color: var(--accent-mint);
+    margin-bottom: 10px;
+  }
+
+  p.lead {
+    font-size: 1.22rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    max-width: 920px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  }
+
+  .card.highlight {
+    background: var(--bg-card-alt);
+    border-color: var(--accent-amber);
+  }
+
+  .wiki-link {
+    display: inline-block;
+    background: rgba(126, 212, 166, 0.14);
+    color: var(--accent-mint);
+    border: 1px solid rgba(126, 212, 166, 0.4);
+    padding: 2px 9px;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin: 2px 3px;
+  }
+
+  .conflict-tag {
+    display: inline-block;
+    background: rgba(242, 125, 107, 0.18);
+    color: var(--accent-coral);
+    border: 1px solid rgba(242, 125, 107, 0.45);
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  ul.clean-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  ul.clean-list li {
+    padding-left: 20px;
+    position: relative;
+    font-size: 1.05rem;
+  }
+
+  ul.clean-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--accent-amber);
+    font-weight: bold;
+  }
+
+  /* 表格樣式 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 0.96rem;
+    border: 1.5px solid var(--border-subtle);
+  }
+
+  th {
+    background: #0F1C14;
+    color: var(--accent-amber);
+    text-align: left;
+    padding: 13px 15px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border-subtle);
+  }
+
+  td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  /* 互動按鈕組 */
+  .tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1.5px solid var(--border-subtle);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.98rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--accent-amber);
+    color: #132219;
+    border-color: var(--accent-amber);
+  }
+
+  /* 底部控制列 */
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px;
+    background: rgba(12, 22, 16, 0.95);
+    border-top: 1.5px solid var(--border-subtle);
+  }
+
+  .nav-btns {
+    display: flex;
+    gap: 12px;
+  }
+
+  button.nav {
+    background: var(--accent-brown);
+    color: #FFF;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  button.nav:hover { opacity: 0.88; }
+  button.nav:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .hint {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 18px;
+    margin-top: 20px;
+  }
+
+  .stat-box {
+    background: var(--bg-card);
+    border: 1.5px solid var(--accent-amber);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    flex: 1;
+  }
+
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-amber);
+  }
+
+  .stat-label {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span>LLM WIKI 知識庫教學簡報</span>
+    <span class="badge">Karpathy 三層架構實作</span>
+  </div>
+  <div class="progress-wrap">
+    <span id="slide-counter">1 / 8</span>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</header>
+
+<main>
+  <!-- Slide 1: 封面與專題核心 -->
+  <section class="slide active" id="slide-1">
+    <span class="badge" style="font-size: 0.95rem; margin-bottom: 14px; display: inline-block;">民俗學 × 認知與社會心理學 × 結構化知識庫</span>
+    <h1>恐懼的集體創作：<br>日本都市傳說與背後的心理學密碼</h1>
+    <p class="lead">從 1970 年代昭和街頭口傳到 2000 年代 2ch 匿名論壇實況，本專題運用 <strong>LLM Wiki 增量編譯架構</strong>，拆解怪談如何映照時代焦慮，並透過心理防禦機制轉化為可被規則掌控的集體文化。</p>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">5 篇</div>
+        <div class="stat-label">不可變原始文獻 (raw/)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">20 頁</div>
+        <div class="stat-label">結構化知識庫頁面 (wiki/)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">8 大機制</div>
+        <div class="stat-label">原子化心理學節點</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">5 處標記</div>
+        <div class="stat-label">跨來源版本衝突追蹤</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 2: Karpathy LLM Wiki 三層架構與工作流 -->
+  <section class="slide" id="slide-2">
+    <h2>一、知識工程方法論：Karpathy LLM Wiki 三層架構</h2>
+    <p class="lead">不同於傳統每次重新檢索的 RAG，本系統將原始資料持續「編譯」進互相連結的 Markdown 知識網絡，並維持嚴格的單向資料流與版本稽核。</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Layer 1：raw/（不可變真相層）</h3>
+        <ul class="clean-list">
+          <li>存放 5 份原始參考文章與維基百科條目（<code>01</code>～<code>05</code>）。</li>
+          <li><strong>唯讀原則：</strong>LLM 僅讀取分析，絕不篡改原始事實。</li>
+          <li>保留完整出處以便回溯驗證。</li>
+        </ul>
+      </div>
+      <div class="card highlight">
+        <h3>Layer 2：wiki/（LLM 編譯知識庫）</h3>
+        <ul class="clean-list">
+          <li><strong>雙向連結網：</strong>使用 <code>[[實體]]</code> 與 <code>[[心理學概念]]</code> 串聯 64 組語意關聯。</li>
+          <li><strong>顯性衝突保留：</strong>遇到年代或結局分歧時不靜默覆蓋，而是並列記錄變體。</li>
+          <li><strong>總控雙檔：</strong><code>index.md</code> 導航與 <code>log.md</code> 附加式日誌。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Layer 3：schema.md（治理協議）</h3>
+        <ul class="clean-list">
+          <li><strong>Loop 1 (Ingest)：</strong>先討論重點與衝突，確認後再寫入更新。</li>
+          <li><strong>Loop 2 (Lint)：</strong>定期偵測孤島頁面、斷鏈與雙向對稱性。</li>
+          <li><strong>Loop 3 (Output)：</strong>直接基於 <code>synthesis/</code> 生成本教學簡報。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 3: 三大時代演變軸線 -->
+  <section class="slide" id="slide-3">
+    <h2>二、三大時代演變：傳播載體如何重塑恐懼形態</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 18%;">演進階段</th>
+          <th style="width: 17%;">時期與載體</th>
+          <th style="width: 22%;">代表案例</th>
+          <th style="width: 23%;">核心空間與恐懼焦點</th>
+          <th style="width: 20%;">文化歸宿（去恐怖化）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>第一階段：<br>街頭與校園口傳</strong></td>
+          <td>1970s–1980s<br>孩童口傳＋報刊週刊放大</td>
+          <td><span class="wiki-link">裂口女</span><br><span class="wiki-link">廁所裡的花子</span></td>
+          <td>黃昏放學街頭、舊校舍廁所；陌生人犯罪與雙薪家庭疏離</td>
+          <td>恐怖電影、動漫《咒術迴戰》假想咒靈符號化</td>
+        </tr>
+        <tr>
+          <td><strong>第二階段：<br>網路論壇實況共創</strong></td>
+          <td>2004–2008<br>2ch 神秘學板（實況／灑落怖）</td>
+          <td><span class="wiki-link">如月車站</span><br><span class="wiki-link">八尺大人</span></td>
+          <td><strong>城鄉雙極光譜：</strong>都市深夜私鐵 vs. 封閉鄉村禁忌（現代版神隱）</td>
+          <td>遠州鐵道官方聯名觀光、《惡靈古堡》角色原型</td>
+        </tr>
+        <tr>
+          <td><strong>第三階段：<br>反向心理暗示惡作劇</strong></td>
+          <td>2001 年起<br>2ch 群體協作禁言</td>
+          <td><span class="wiki-link">鮫島事件</span></td>
+          <td>純網路資訊真空；未知留白與害怕被群體排斥的從眾壓力</td>
+          <td>成為網路迷因與「多數無知」傳播學經典案例</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Slide 4: 進化與認知心理學雙引擎 -->
+  <section class="slide" id="slide-4">
+    <h2>三、為何人形怪談最可怕？進化與認知心理學雙引擎</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>1. 恐怖谷理論 (Uncanny Valley)</h3>
+        <ul class="clean-list">
+          <li><strong>理論源流：</strong>佛洛伊德（1919）提出「熟悉又陌生的壓抑感」，日本機器人學家森政弘（1970）建立擬人好感度曲線。</li>
+          <li><strong>動態放大效應：</strong>會移動、追逐的類人體比靜態人偶跌入恐怖谷更深。</li>
+          <li><strong>疾病與屍體聯想：</strong><span class="wiki-link">裂口女</span> 摘下口罩露出的裂嘴與蒼白皮膚，觸發人類對創傷與傳染病的本能演化厭惡。</li>
+          <li><strong>「他者」認知阻力：</strong>寫實卻帶異常比例（如 <span class="wiki-link">八尺大人</span> 240cm 身高）使大腦無法自我代入，產生強烈排斥。</li>
+        </ul>
+      </div>
+      <div class="card highlight">
+        <h3>2. 過度偵測威脅機制 (HADD) & 邊界空間</h3>
+        <ul class="clean-list">
+          <li><strong>寧可信其有（HADD）：</strong>遠古演化使人類大腦在光線昏暗時，傾向將模糊黑影或低頻怪聲（「波波波」、祭典鼓聲）優先判定為掠食者威脅。</li>
+          <li><strong>邊界空間 (Liminal Space)：</strong><span class="wiki-link">廁所裡的花子</span>（舊校舍隔間）與 <span class="wiki-link">如月車站</span>（深夜末班車與隧道）皆處於「日常與非日常交界」。</li>
+          <li><strong>現代版「神隱」：</strong>感官剝奪加上高度規律的通勤疲勞，放大了「脫離社會秩序系統」的孤立恐懼。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5: 規則怪談與認知控制感補償 -->
+  <section class="slide" id="slide-5">
+    <h2>四、為何要幫怪物發明「破解規則」？控制感補償機制</h2>
+    <p class="lead">心理學發現，當人類面對「無論怎麼選都會遭遇災難（雙重束縛 Double Bind）」時，會透過集體創作儀式化的通關步驟，將不可控的死亡恐懼轉化為可控的「解謎遊戲」。</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3>破解雙重束縛：<span class="wiki-link">裂口女</span></h3>
+        <p style="color: var(--text-muted); margin-bottom: 10px;">原本答「漂亮」或「不漂亮」皆死，民間衍生三大反制規則：</p>
+        <ul class="clean-list">
+          <li><strong>模糊回答：</strong>說「一般般（普通）」製造認知猶豫。</li>
+          <li><strong>物質轉移：</strong>丟出錢或鼈甲糖分散注意力。</li>
+          <li><strong>關鍵詞退治：</strong>連喊三次「髮蠟（ポマード）」。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>補完無解結局：<span class="wiki-link">如月車站</span></h3>
+        <p style="color: var(--text-muted); margin-bottom: 10px;">2004 原版貼主搭陌生人便車後永遠失聯，引發高度無助感：</p>
+        <ul class="clean-list">
+          <li><strong>集體二創修正：</strong>2011 年出現「自稱葉純生還報平安」說法。</li>
+          <li><strong>補上通關儀式：</strong>2018 後網友創作出「燃燒隨身物品製造煙霧即可返回現實」的逃脫規則。</li>
+        </ul>
+      </div>
+      <div class="card highlight">
+        <h3>儀式結界防護：<span class="wiki-link">八尺大人</span></h3>
+        <p style="color: var(--text-muted); margin-bottom: 10px;">面對無法物理對抗的 240 公分鄉村女妖，依賴嚴格儀式獲得心理安全：</p>
+        <ul class="clean-list">
+          <li><strong>空間結界：</strong>躲入貼滿符咒與放置鹽巴的密室。</li>
+          <li><strong>行為禁忌：</strong>天亮前絕不開門、不回應門外任何模仿親人的聲音。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 6: 社會與傳播心理學：從恐慌放大到符號消費 -->
+  <section class="slide" id="slide-6">
+    <h2>五、社會與傳播心理學：情緒傳染與「恐懼消解三部曲」</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>情緒傳染與參與式共創</h3>
+        <ul class="clean-list">
+          <li><strong>單向權威放大（1970s）：</strong>《岐阜日日新聞》與《週刊朝日》報導裂口女，使地方謠言升級為全國停課與家長接送潮。</li>
+          <li><strong>參與式都市傳說（2000s）：</strong>2ch 網友即時建議葉純報警、在 Google 地圖惡搞標記筑波大學、前往鷺之宮站聖地巡禮（Ostension）。</li>
+          <li><strong>多數無知（Pluralistic Ignorance）：</strong><span class="wiki-link">鮫島事件</span> 靠眾人集體禁言「太恐怖不能說」，在資訊完全空白下製造自我實現的恐慌。</li>
+        </ul>
+      </div>
+      <div class="card highlight">
+        <h3>跨時代「去恐怖化」三部曲</h3>
+        <p style="color: var(--text-muted); margin-bottom: 12px;">印證森政弘恐怖谷曲線右端：當怪物經過藝術「理想化」與商業 IP 轉譯後，恐懼感消退並轉化為文化消費符號：</p>
+        <ul class="clean-list">
+          <li><strong>動漫奇幻化：</strong><span class="wiki-link">裂口女</span> 轉化為《咒術迴戰》假想咒靈與 Q 版角色。</li>
+          <li><strong>地方觀光化：</strong><span class="wiki-link">如月車站</span> 成為遠州鐵道官方聯名廣告與 2022/2025 真人電影。</li>
+          <li><strong>美學偶像化：</strong><span class="wiki-link">八尺大人</span> 成為《惡靈古堡 村莊》蒂米特雷斯庫夫人靈感原型。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 7: LLM Wiki 核心亮點：跨來源衝突追蹤互動檢視 -->
+  <section class="slide" id="slide-7">
+    <h2>六、LLM Wiki 實證成果：跨來源版本衝突追蹤（5 處捕獲）</h2>
+    <p class="lead">點擊下方按鈕，檢視知識庫如何在整合 <code>raw/01</code>～<code>raw/05</code> 時保留矛盾證據，而非盲目覆蓋舊資料：</p>
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="showConflict(0, this)">衝突 1：裂口女起源年代</button>
+      <button class="tab-btn" onclick="showConflict(1, this)">衝突 2：裂口女結局分歧</button>
+      <button class="tab-btn" onclick="showConflict(2, this)">衝突 3：如月車站可逃脫性</button>
+      <button class="tab-btn" onclick="showConflict(3, this)">衝突 4：虛實地理落差</button>
+      <button class="tab-btn" onclick="showConflict(4, this)">衝突 5：八尺大人目標受眾</button>
+    </div>
+    <div class="card highlight" id="conflict-display" style="min-height: 220px;">
+      <!-- 預設顯示第 1 筆 -->
+    </div>
+  </section>
+
+  <!-- Slide 8: Lint 稽核總結與結論 -->
+  <section class="slide" id="slide-8">
+    <h2>七、知識庫健康度稽核 (Lint #1) 與專題結論</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Loop 2：Wiki 健康檢查結果 (95/100 PASS)</h3>
+        <ul class="clean-list">
+          <li><strong>索引與連結完整性：</strong>20 頁全數登錄 <code>index.md</code>，64 組 <code>[[...]]</code> 雙向連結零斷鏈、零孤島頁面。</li>
+          <li><strong>自動修復紀錄：</strong>Lint 階段偵測並修復 <code>[[確認偏誤]]</code> 概念頁之「現實地理錨定」反向連結對稱性。</li>
+          <li><strong>識別未來擴充缺口：</strong>已標記 <code>[[廁所裡的花子]]</code> 地方變體與 <code>[[鮫島事件]]</code> 資訊真空專文供 <code>raw/06+</code> 擴充。</li>
+        </ul>
+      </div>
+      <div class="card highlight">
+        <h3>專題核心洞察</h3>
+        <p style="font-size: 1.12rem; margin-bottom: 14px;">都市傳說不是荒誕的迷信，而是<strong>社會集體潛意識的減壓閥</strong>。</p>
+        <p style="color: var(--text-muted);">透過 LLM Wiki 的結構化編譯，我們清晰看見人類大腦如何先用「怪物」具象化時代焦慮（HADD 與恐怖谷），再用「通關規則」奪回心理控制感，最終透過大眾文化將恐懼轉化為共享的時代記憶。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="hint">操作提示：可使用鍵盤 <strong>← / →</strong> 方向鍵或右側按鈕切換投影片</div>
+  <div class="nav-btns">
+    <button class="nav" id="prev-btn" onclick="changeSlide(-1)" disabled>← 上一頁</button>
+    <button class="nav" id="next-btn" onclick="changeSlide(1)">下一頁 →</button>
+  </div>
+</footer>
+
+<script>
+  const totalSlides = 8;
+  let currentSlide = 1;
+
+  const conflicts = [
+    {
+      tag: "⚠️ Contradiction 1 | raw/01 vs. raw/02",
+      title: "[[裂口女 (口裂け女)]]：昭和現代怪談 vs. 江戶時代古典妖怪",
+      sourceA: "raw/01（綜述筆記）：將裂口女定位為 1970 年代末日本經濟高速成長後期的現代都市傳說。",
+      sourceB: "raw/02（維基百科考據）：民俗學家馬修·梅爾考證其原型早於 17–19 世紀江戶時代（1801 年《繪本小夜時雨》已有記載），1979 年實為古典妖怪透過報紙週刊復活。"
+    },
+    {
+      tag: "⚠️ Contradiction 2 | raw/01 vs. raw/02",
+      title: "[[裂口女 (口裂け女)]]：連答兩次「漂亮」後的兩種結局",
+      sourceA: "raw/01 & 主流版本：摘下口罩追問後，若被害者仍回答「漂亮」，裂口女會當場用剪刀剪開其嘴角變成同類。",
+      sourceB: "raw/02 變體紀錄：另有版本指出她會先放被害者安全離去，但當晚會潛入被害者家中，在睡夢中將其殺害。"
+    },
+    {
+      tag: "⚠️ Contradiction 3 | raw/01 vs. raw/03",
+      title: "[[如月車站 (きさらぎ駅)]]：無解失蹤悲劇 vs. 生煙逃脫與生還說",
+      sourceA: "raw/01 & 2004 原始實況：貼主「葉純」搭上陌生好心人便車後永遠停止發文，無任何破解規則。",
+      sourceB: "raw/03（2011–2018 網路二創）：出現自稱葉純者報平安，且網友補完「燃燒隨身物品生煙即可返回現實」的通關規則，印證心理控制感補償。"
+    },
+    {
+      tag: "⚠️ Contradiction 4 | raw/03 虛實空間比對",
+      title: "[[如月車站 (きさらぎ駅)]]：荒山野嶺無人站 vs. 現實住宅區原型",
+      sourceA: "傳說敘事描述：四周完全是荒山野嶺、手機 GPS 失效、遠處傳來詭異祭典鼓聲的異界無人站。",
+      sourceB: "現實地理考據：原型為遠州鐵道「鷺之宮站」，周邊實為車水馬龍的住宅區；傳說透過 2004 年未設便利商店前的陰暗記憶濾鏡進行了戲劇化誇飾。"
+    },
+    {
+      tag: "⚠️ Contradiction 5 | raw/01 vs. raw/05",
+      title: "[[八尺大人 (八尺様)]]：誘拐年輕男性 vs. 迷惑殺害孩童",
+      sourceA: "raw/01（2ch 敘事視角）：專門鎖定「年輕男性（返鄉青年）」進行誘拐，受害者須躲入符咒密室。",
+      sourceB: "raw/05（維基百科民俗視角）：當地村民害怕她「會迷惑小孩，然後把他們殺掉」，反映鄉村防止孩童走失的傳統警世寓言功能。"
+    }
+  ];
+
+  function showConflict(idx, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const c = conflicts[idx];
+    document.getElementById('conflict-display').innerHTML = `
+      <span class="conflict-tag">${c.tag}</span>
+      <h3 style="margin-bottom: 14px;">${c.title}</h3>
+      <ul class="clean-list">
+        <li><strong>來源 A 觀點：</strong>${c.sourceA}</li>
+        <li><strong>來源 B 觀點：</strong>${c.sourceB}</li>
+      </ul>
+    `;
+  }
+
+  function updateUI() {
+    document.querySelectorAll('.slide').forEach((s, i) => {
+      s.classList.toggle('active', i + 1 === currentSlide);
+    });
+    document.getElementById('slide-counter').textContent = `${currentSlide} / ${totalSlides}`;
+    document.getElementById('progress-fill').style.width = `${(currentSlide / totalSlides) * 100}%`;
+    document.getElementById('prev-btn').disabled = currentSlide === 1;
+    document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+  }
+
+  function changeSlide(dir) {
+    const next = currentSlide + dir;
+    if (next >= 1 && next <= totalSlides) {
+      currentSlide = next;
+      updateUI();
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+  });
+
+  // 初始化第一則衝突展示
+  showConflict(0, document.querySelector('.tab-btn'));
+</script>
+</body>
+</html>
